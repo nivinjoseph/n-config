@@ -1,48 +1,48 @@
 {
-    "name": "n-config",
-    "version": "1.0.1",
-    "description": "Configuration management library",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "scripts": {
-        "ts-build": "tsc -p .",
-        "ts-build-watch": "npm run ts-build -- -w",
-        "ts-build-dist": "tsc -p ./dist",
-        "x-ts-watch-build": "watch 'npm run build' ./src --wait 1 --interval 1",
-        "clean-src": "find ./src -name '*.js' -delete -o -name '*.map' -delete",
-        "clean-test": "find ./test -name '*.js' -delete -o -name '*.map' -delete",
-        "pretest": "npm run ts-build",
-        "test": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js' || true",
-        "pretest-ci": "npm run pretest",
-        "test-ci": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js'",
-        "pregit-publish": "npm run ts-build-dist && git add . && git commit -m 'preparing to publish new version'",
-        "git-publish": "npm version patch",
-        "postgit-publish": "git push"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/nivinjoseph/n-config.git"
-    },
-    "keywords": [
-        "config"
-    ],
-    "author": "NiviN",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/nivinjoseph/n-config/issues"
-    },
-    "homepage": "https://github.com/nivinjoseph/n-config#readme",
-    "devDependencies": {
-        "@types/mocha": "^2.2.39",
-        "@types/node": "^7.0.5",
-        "@types/sinon": "^1.16.35",
-        "mocha": "^3.2.0",
-        "sinon": "^2.0.0-pre.6",
-        "ts-node": "^2.1.0",
-        "tslint": "^4.5.1",
-        "typescript": "2.2.1"
-    },
-    "dependencies": {
-        "n-ext": "git+https://github.com/nivinjoseph/n-ext.git"
-    }
+  "name": "n-config",
+  "version": "1.0.2",
+  "description": "Configuration management library",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "ts-build": "tsc -p .",
+    "ts-build-watch": "npm run ts-build -- -w",
+    "ts-build-dist": "tsc -p ./dist",
+    "x-ts-watch-build": "watch 'npm run build' ./src --wait 1 --interval 1",
+    "clean-src": "find ./src -name '*.js' -delete -o -name '*.map' -delete",
+    "clean-test": "find ./test -name '*.js' -delete -o -name '*.map' -delete",
+    "pretest": "npm run ts-build",
+    "test": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js' || true",
+    "pretest-ci": "npm run pretest",
+    "test-ci": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js'",
+    "pregit-publish": "npm run ts-build-dist && git add . && git commit -m 'preparing to publish new version'",
+    "git-publish": "npm version patch",
+    "postgit-publish": "git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nivinjoseph/n-config.git"
+  },
+  "keywords": [
+    "config"
+  ],
+  "author": "NiviN",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nivinjoseph/n-config/issues"
+  },
+  "homepage": "https://github.com/nivinjoseph/n-config#readme",
+  "devDependencies": {
+    "@types/mocha": "^2.2.39",
+    "@types/node": "^7.0.5",
+    "@types/sinon": "^1.16.35",
+    "mocha": "^3.2.0",
+    "sinon": "^2.0.0-pre.6",
+    "ts-node": "^2.1.0",
+    "tslint": "^4.5.1",
+    "typescript": "2.2.1"
+  },
+  "dependencies": {
+    "n-ext": "git+https://github.com/nivinjoseph/n-ext.git"
+  }
 }
