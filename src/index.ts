@@ -14,6 +14,9 @@ if (fs.existsSync(filePath))
 
 export class ConfigurationManager
 {
+    private constructor() { }
+    
+    
     public static getConfig<T>(key: string): T
     {
         let value = config[key];
