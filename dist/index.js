@@ -23,12 +23,6 @@ if (args.length > 2) {
         let value = parts[1].trim();
         if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
             continue;
-        let strVal = value;
-        if ((strVal.startsWith('"') && strVal.endsWith('"')) || (strVal.startsWith("'") && strVal.endsWith("'"))) {
-            strVal = strVal.substring(1, strVal.length - 1);
-            config[key] = strVal;
-            continue;
-        }
         let boolVal = value.toLowerCase();
         if (boolVal === "true" || boolVal === "false") {
             config[key] = boolVal === "true";
@@ -42,6 +36,8 @@ if (args.length > 2) {
             }
         }
         catch (error) { }
+        let strVal = value;
+        config[key] = strVal;
     }
 }
 class ConfigurationManager {

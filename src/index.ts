@@ -3,8 +3,6 @@ import * as path from "path";
 import "n-ext";
 
 
-
-
 let config: {[index: string]: any} = {};
 const filePath = path.join(process.cwd(), "config.json");
 
@@ -21,6 +19,7 @@ if (args.length > 2)
     for (let i = 2; i < args.length; i++)
     {
         let arg = args[i].trim();
+        
         if (!arg.contains("="))
             continue;
         
@@ -34,20 +33,12 @@ if (args.length > 2)
         if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
             continue;
         
-        let strVal = value;
-        if ((strVal.startsWith('"') && strVal.endsWith('"')) || (strVal.startsWith("'") && strVal.endsWith("'")))
-        {
-            strVal = strVal.substring(1, strVal.length - 1);
-            config[key] = strVal;
-            continue;
-        }   
-        
         let boolVal = value.toLowerCase();
         if (boolVal === "true" || boolVal === "false")
         {
             config[key] = boolVal === "true";
             continue;
-        }    
+        }   
         
         try 
         {
@@ -60,8 +51,12 @@ if (args.length > 2)
         }
         catch (error)
         { }
+        
+        let strVal = value;
+        config[key] = strVal;
     }    
 }    
+
 
 export class ConfigurationManager
 {

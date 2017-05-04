@@ -16,7 +16,9 @@
     "test-ci": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js'",
     "pregit-publish": "npm run ts-build-dist && git add . && git commit -m 'preparing to publish new version'",
     "git-publish": "npm version patch",
-    "postgit-publish": "git push"
+    "postgit-publish": "git push",
+    "prestart": "npm run ts-build",
+    "start": "node ./src/index.js mode=dev"
   },
   "repository": {
     "type": "git",
