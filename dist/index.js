@@ -1,25 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
-var path = require("path");
+const fs = require("fs");
+const path = require("path");
 require("n-ext");
-var config = {};
-var filePath = path.join(process.cwd(), "config.json");
+let config = {};
+const filePath = path.join(process.cwd(), "config.json");
 if (fs.existsSync(filePath)) {
-    var json = fs.readFileSync(filePath, "utf8");
+    const json = fs.readFileSync(filePath, "utf8");
     if (json != null && !json.isEmptyOrWhiteSpace())
         config = JSON.parse(json);
 }
-var ConfigurationManager = (function () {
-    function ConfigurationManager() {
+let args = process.argv;
+if (args.length > 2) {
+    for (let i = 2; i < args.length; i++) {
+        let arg = args[i].trim();
+        if (!arg.contains("="))
+            continue;
+        let parts = arg.split("=");
+        if (parts.length !== 2)
+            continue;
+        let key = parts[0].trim();
+        let value = parts[1].trim();
+        if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
+            continue;
+        let strVal = value;
+        if ((strVal.startsWith('"') && strVal.endsWith('"')) || (strVal.startsWith("'") && strVal.endsWith("'"))) {
+            strVal = strVal.substring(1, strVal.length - 1);
+            config[key] = strVal;
+            continue;
+        }
+        let boolVal = value.toLowerCase();
+        if (boolVal === "true" || boolVal === "false") {
+            config[key] = boolVal === "true";
+            continue;
+        }
+        try {
+            let numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
+            if (!Number.isNaN(numVal)) {
+                config[key] = numVal;
+                continue;
+            }
+        }
+        catch (error) { }
     }
-    ConfigurationManager.getConfig = function (key) {
-        var value = config[key];
+}
+class ConfigurationManager {
+    constructor() { }
+    static getConfig(key) {
+        let value = config[key];
         if (value === undefined || value == null)
             return null;
         return value;
-    };
-    return ConfigurationManager;
-}());
+    }
+}
 exports.ConfigurationManager = ConfigurationManager;
 //# sourceMappingURL=index.js.map

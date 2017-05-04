@@ -8,7 +8,6 @@
     "ts-build": "tsc -p .",
     "ts-build-watch": "npm run ts-build -- -w",
     "ts-build-dist": "tsc -p ./dist",
-    "x-ts-watch-build": "watch 'npm run build' ./src --wait 1 --interval 1",
     "clean-src": "find ./src -name '*.js' -delete -o -name '*.map' -delete",
     "clean-test": "find ./test -name '*.js' -delete -o -name '*.map' -delete",
     "pretest": "npm run ts-build",
