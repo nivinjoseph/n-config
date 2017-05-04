@@ -1,6 +1,6 @@
 {
   "name": "n-config",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Configuration management library",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
