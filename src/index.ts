@@ -1,8 +1,6 @@
 import "n-ext";
 import { given } from "n-defensive";
 
-// declare const fs: any;
-// declare const path: any;
 
 let config: { [index: string]: any } = {};
 
@@ -11,10 +9,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined")
     config = Object.assign(config, (<any>window).config);
 }    
 else
-{
-    // import * as fs from "fs";
-    // import * as path from "path";
-    
+{    
     let fs: any;
     let path: any;
     

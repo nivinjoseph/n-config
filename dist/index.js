@@ -2,15 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("n-ext");
 const n_defensive_1 = require("n-defensive");
-// declare const fs: any;
-// declare const path: any;
 let config = {};
 if (typeof window !== "undefined" && typeof document !== "undefined") {
     config = Object.assign(config, window.config);
 }
 else {
-    // import * as fs from "fs";
-    // import * as path from "path";
     let fs;
     let path;
     eval(`fs = require("fs");`);
