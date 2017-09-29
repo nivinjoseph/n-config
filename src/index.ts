@@ -1,6 +1,9 @@
 import "n-ext";
 import { given } from "n-defensive";
 
+// declare const fs: any;
+// declare const path: any;
+
 let config: { [index: string]: any } = {};
 
 if (typeof window !== "undefined" && typeof document !== "undefined")
@@ -12,8 +15,11 @@ else
     // import * as fs from "fs";
     // import * as path from "path";
     
-    const fs = require("fs");
-    const path = require("path");
+    let fs: any;
+    let path: any;
+    
+    eval(`fs = require("fs");`);
+    eval(`path = require("path");`);
     
     
     const filePath = path.join(process.cwd(), "config.json");
