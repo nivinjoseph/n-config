@@ -20,4 +20,11 @@ suite("Basic tests", () =>
         let value = ConfigurationManager.getConfig("test2");
         assert.strictEqual(value, null);
     });
+    
+    // test.only("object assign", () =>
+    // {
+    //     let some = Object.assign({ foo: "blah" }, null, undefined, { foo1: "foo", bar: "buzz" });
+    //     assert.deepStrictEqual(some, { foo: "blah", foo1: "foo", bar: "buzz" });
+    //     console.log(JSON.stringify(some));
+    // });
 });
