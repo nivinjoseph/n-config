@@ -53,10 +53,6 @@ class ConfigurationManager {
     static getConfig(key) {
         n_defensive_1.given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         return config.getValue(key);
-        // let value = config[key];
-        // if (value === undefined || value == null)
-        //     return null;
-        // return value as T;
     }
 }
 exports.ConfigurationManager = ConfigurationManager;

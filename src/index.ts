@@ -82,10 +82,5 @@ export abstract class ConfigurationManager
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         
         return config.getValue(key);
-        
-        // let value = config[key];
-        // if (value === undefined || value == null)
-        //     return null;
-        // return value as T;
     }
 }
