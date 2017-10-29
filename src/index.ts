@@ -17,15 +17,39 @@ else
     eval(`path = require("path");`);
     
     
-    const filePath = path.join(process.cwd(), "config.json");
+    // first we get app info (name, description and version) from package.json
+    let filePath = path.join(process.cwd(), "package.json");
 
     if (fs.existsSync(filePath))
     {
         const json = fs.readFileSync(filePath, "utf8");
         if (json != null && !json.isEmptyOrWhiteSpace())
-            config = JSON.parse(json);
+        {
+            const parsed: Object = JSON.parse(json);
+            const appInfo = {
+                name: parsed.getValue("name"),
+                description: parsed.getValue("description"),
+                version: parsed.getValue("version")
+            };
+            
+            Object.assign(config, appInfo);
+        }
+    }
+    
+    // then we pick up info from config.json
+    filePath = path.join(process.cwd(), "config.json");
+
+    if (fs.existsSync(filePath))
+    {
+        const json = fs.readFileSync(filePath, "utf8");
+        if (json != null && !json.isEmptyOrWhiteSpace())
+        {
+            const parsed = JSON.parse(json);
+            Object.assign(config, parsed);
+        }
     }
 
+    // finally we pick up info from command line args
     let args = process.argv;
     if (args.length > 2)
     {
