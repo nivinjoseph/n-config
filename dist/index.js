@@ -11,60 +11,100 @@ else {
     let path;
     eval(`fs = require("fs");`);
     eval(`path = require("path");`);
-    // first we get app info (name, description and version) from package.json
-    let filePath = path.join(process.cwd(), "package.json");
-    if (fs.existsSync(filePath)) {
-        const json = fs.readFileSync(filePath, "utf8");
-        if (json != null && !json.isEmptyOrWhiteSpace()) {
-            const parsed = JSON.parse(json);
-            const appInfo = {
+    const parsePackageDotJson = () => {
+        const packageDotJsonPath = path.resolve(process.cwd(), "package.json");
+        const obj = {};
+        if (!fs.existsSync(packageDotJsonPath))
+            return obj;
+        const json = fs.readFileSync(packageDotJsonPath, "utf8");
+        if (json != null && !json.toString().isEmptyOrWhiteSpace()) {
+            const parsed = JSON.parse(json.toString());
+            obj.appInfo = {
                 name: parsed.getValue("name"),
                 description: parsed.getValue("description"),
                 version: parsed.getValue("version")
             };
-            Object.assign(config, appInfo);
         }
-    }
-    // then we pick up info from config.json
-    filePath = path.join(process.cwd(), "config.json");
-    if (fs.existsSync(filePath)) {
-        const json = fs.readFileSync(filePath, "utf8");
-        if (json != null && !json.isEmptyOrWhiteSpace()) {
-            const parsed = JSON.parse(json);
-            Object.assign(config, parsed);
-        }
-    }
-    // finally we pick up info from command line args
-    let args = process.argv;
-    if (args.length > 2) {
+        return obj;
+    };
+    /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
+     * Parses a string or buffer into an object
+     * @param {(string|Buffer)} src - source to be parsed
+     * @returns {Object} keys and values from src
+    */
+    const parseDotEnv = () => {
+        const dotEnvPath = path.resolve(process.cwd(), ".env");
+        const obj = {};
+        if (!fs.existsSync(dotEnvPath))
+            return obj;
+        const src = fs.readFileSync(dotEnvPath, "utf8");
+        src.toString().split("\n").forEach((line) => {
+            // matching "KEY' and 'VAL' in 'KEY=VAL'
+            const keyValueArr = line.match(/^\s*([\w\.\-]+)\s*=\s*(.*)?\s*$/);
+            // matched?
+            if (keyValueArr != null) {
+                const key = keyValueArr[1];
+                // default undefined or missing values to empty string
+                let value = keyValueArr[2] || "";
+                // expand newlines in quoted values
+                const len = value ? value.length : 0;
+                if (len > 0 && value.charAt(0) === '"' && value.charAt(len - 1) === '"') {
+                    value = value.replace(/\\n/gm, "\n");
+                }
+                // remove any surrounding quotes and extra spaces
+                value = value.replace(/(^['"]|['"]$)/g, "").trim();
+                obj[key] = value;
+            }
+        });
+        return obj;
+    };
+    const parseConfigDotJson = () => {
+        const configDotJsonPath = path.resolve(process.cwd(), "config.json");
+        let obj = {};
+        if (!fs.existsSync(configDotJsonPath))
+            return obj;
+        const json = fs.readFileSync(configDotJsonPath, "utf8");
+        if (json != null && !json.toString().isEmptyOrWhiteSpace())
+            obj = JSON.parse(json.toString());
+        return obj;
+    };
+    const parseProcessDotEnv = () => {
+        return process.env || {};
+    };
+    const parseCommandLineArgs = () => {
+        const obj = {};
+        const args = process.argv;
+        if (args.length <= 2)
+            return obj;
         for (let i = 2; i < args.length; i++) {
-            let arg = args[i].trim();
+            const arg = args[i].trim();
             if (!arg.contains("="))
                 continue;
-            let parts = arg.split("=");
+            const parts = arg.split("=");
             if (parts.length !== 2)
                 continue;
-            let key = parts[0].trim();
-            let value = parts[1].trim();
+            const key = parts[0].trim();
+            const value = parts[1].trim();
             if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
                 continue;
-            let boolVal = value.toLowerCase();
+            const boolVal = value.toLowerCase();
             if (boolVal === "true" || boolVal === "false") {
-                config[key] = boolVal === "true";
+                obj[key] = boolVal === "true";
                 continue;
             }
             try {
-                let numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
+                const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
                 if (!Number.isNaN(numVal)) {
-                    config[key] = numVal;
+                    obj[key] = numVal;
                     continue;
                 }
             }
             catch (error) { }
-            let strVal = value;
-            config[key] = strVal;
+            const strVal = value;
+            obj[key] = strVal;
         }
-    }
+    };
+    config = Object.assign(config, parsePackageDotJson(), parseDotEnv(), parseConfigDotJson(), parseProcessDotEnv(), parseCommandLineArgs());
 }
 class ConfigurationManager {
     constructor() { }
