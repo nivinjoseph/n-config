@@ -1,5 +1,5 @@
-import "n-ext";
-import { given } from "n-defensive";
+import "@nivinjoseph/n-ext";
+import { given } from "@nivinjoseph/n-defensive";
 
 
 let config: { [index: string]: any } = {};

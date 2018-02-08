@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("n-ext");
-const n_defensive_1 = require("n-defensive");
+require("@nivinjoseph/n-ext");
+const n_defensive_1 = require("@nivinjoseph/n-defensive");
 let config = {};
 if (typeof window !== "undefined" && typeof document !== "undefined") {
     config = Object.assign(config, window.config);

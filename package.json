@@ -1,5 +1,5 @@
 {
-  "name": "n-config",
+  "name": "@nivinjoseph/n-config",
   "version": "1.0.12",
   "description": "Configuration management library",
   "main": "./dist/index.js",
@@ -14,11 +14,7 @@
     "test": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js' || true",
     "pretest-ci": "npm run pretest",
     "test-ci": "mocha --reporter spec --ui tdd --require ts-node/register './test/**/*.test.js'",
-    "pregit-publish": "npm run ts-build-dist && git add . && git commit -m 'preparing to publish new version'",
-    "git-publish": "npm version patch",
-    "postgit-publish": "git push",
-    "prestart": "npm run ts-build",
-    "start": "node ./src/index.js mode=dev"
+    "publish-package": "npm run ts-build-dist && git add . && git commit -m 'preparing to publish new version' && npm version patch && git push && npm publish --access=public"
   },
   "repository": {
     "type": "git",
@@ -44,7 +40,7 @@
     "typescript": "^2.2.1"
   },
   "dependencies": {
-    "n-defensive": "git+https://github.com/nivinjoseph/n-defensive.git",
-    "n-ext": "git+https://github.com/nivinjoseph/n-ext.git"
+    "@nivinjoseph/n-defensive": "^1.0.17",
+    "@nivinjoseph/n-ext": "^1.0.24"
   }
 }
