@@ -37,19 +37,33 @@ else
 
         return obj;
     };
-
+    
+    const parseConfigDotJson = () =>
+    {
+        const configDotJsonPath = path.resolve(process.cwd(), "config.json");
+        let obj: any = {};
+        if (!fs.existsSync(configDotJsonPath))
+            return obj;    
+        
+        const json: string = fs.readFileSync(configDotJsonPath, "utf8");
+        if (json != null && !json.toString().isEmptyOrWhiteSpace())
+            obj = JSON.parse(json.toString());
+        
+        return obj;
+    };
+    
     /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
-     * Parses a string or buffer into an object
-     * @param {(string|Buffer)} src - source to be parsed
-     * @returns {Object} keys and values from src
+    * Parses a string or buffer into an object
+    * @param {(string|Buffer)} src - source to be parsed
+    * @returns {Object} keys and values from src
     */
     const parseDotEnv = () =>
     {
         const dotEnvPath: string = path.resolve(process.cwd(), ".env");
         const obj: any = {};
         if (!fs.existsSync(dotEnvPath))
-            return obj;    
-        
+            return obj;
+
         const src: string = fs.readFileSync(dotEnvPath, "utf8");
         src.toString().split("\n").forEach((line) =>
         {
@@ -77,20 +91,6 @@ else
             }
         });
 
-        return obj;
-    };
-    
-    const parseConfigDotJson = () =>
-    {
-        const configDotJsonPath = path.resolve(process.cwd(), "config.json");
-        let obj: any = {};
-        if (!fs.existsSync(configDotJsonPath))
-            return obj;    
-        
-        const json: string = fs.readFileSync(configDotJsonPath, "utf8");
-        if (json != null && !json.toString().isEmptyOrWhiteSpace())
-            obj = JSON.parse(json.toString());
-        
         return obj;
     };
     
@@ -148,7 +148,7 @@ else
     };
     
     
-    config = Object.assign(config, parsePackageDotJson(), parseDotEnv(), parseConfigDotJson(),
+    config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(),
         parseProcessDotEnv(), parseCommandLineArgs());
 }
 

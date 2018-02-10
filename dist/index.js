@@ -27,10 +27,20 @@ else {
         }
         return obj;
     };
+    const parseConfigDotJson = () => {
+        const configDotJsonPath = path.resolve(process.cwd(), "config.json");
+        let obj = {};
+        if (!fs.existsSync(configDotJsonPath))
+            return obj;
+        const json = fs.readFileSync(configDotJsonPath, "utf8");
+        if (json != null && !json.toString().isEmptyOrWhiteSpace())
+            obj = JSON.parse(json.toString());
+        return obj;
+    };
     /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
-     * Parses a string or buffer into an object
-     * @param {(string|Buffer)} src - source to be parsed
-     * @returns {Object} keys and values from src
+    * Parses a string or buffer into an object
+    * @param {(string|Buffer)} src - source to be parsed
+    * @returns {Object} keys and values from src
     */
     const parseDotEnv = () => {
         const dotEnvPath = path.resolve(process.cwd(), ".env");
@@ -56,16 +66,6 @@ else {
                 obj[key] = value;
             }
         });
-        return obj;
-    };
-    const parseConfigDotJson = () => {
-        const configDotJsonPath = path.resolve(process.cwd(), "config.json");
-        let obj = {};
-        if (!fs.existsSync(configDotJsonPath))
-            return obj;
-        const json = fs.readFileSync(configDotJsonPath, "utf8");
-        if (json != null && !json.toString().isEmptyOrWhiteSpace())
-            obj = JSON.parse(json.toString());
         return obj;
     };
     const parseProcessDotEnv = () => {
@@ -104,7 +104,7 @@ else {
             obj[key] = strVal;
         }
     };
-    config = Object.assign(config, parsePackageDotJson(), parseDotEnv(), parseConfigDotJson(), parseProcessDotEnv(), parseCommandLineArgs());
+    config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
 }
 class ConfigurationManager {
     constructor() { }
