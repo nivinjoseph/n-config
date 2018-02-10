@@ -103,6 +103,7 @@ else {
             const strVal = value;
             obj[key] = strVal;
         }
+        return obj;
     };
     config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
 }

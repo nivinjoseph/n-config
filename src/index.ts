@@ -145,6 +145,8 @@ else
             const strVal = value;
             obj[key] = strVal;
         }
+        
+        return obj;
     };
     
     
