@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
+const buffer_1 = require("buffer");
 let config = {};
 if (typeof window !== "undefined" && typeof document !== "undefined") {
-    config = Object.assign(config, window.config);
+    config = Object.assign(config, JSON.parse(buffer_1.Buffer.from(window.config, "hex").toString("utf8")));
 }
 else {
     let fs;
