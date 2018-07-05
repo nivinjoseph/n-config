@@ -26,6 +26,7 @@ else {
                 version: parsed.getValue("version")
             };
         }
+        console.log("parsePackageDotJson", JSON.stringify(obj));
         return obj;
     };
     const parseConfigDotJson = () => {
@@ -36,6 +37,7 @@ else {
         const json = fs.readFileSync(configDotJsonPath, "utf8");
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
             obj = JSON.parse(json.toString());
+        console.log("parseConfigDotJson", JSON.stringify(obj));
         return obj;
     };
     /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
@@ -67,10 +69,13 @@ else {
                 obj[key] = value;
             }
         });
+        console.log("parseDotEnv", JSON.stringify(obj));
         return obj;
     };
     const parseProcessDotEnv = () => {
-        return process.env || {};
+        const obj = process.env || {};
+        console.log("parseProcessDotEnv", JSON.stringify(obj));
+        return obj;
     };
     const parseCommandLineArgs = () => {
         const obj = {};
@@ -104,6 +109,7 @@ else {
             const strVal = value;
             obj[key] = strVal;
         }
+        console.log("parseCommandLineArgs", JSON.stringify(obj));
         return obj;
     };
     config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
