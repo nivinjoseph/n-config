@@ -98,6 +98,14 @@ else
     const parseProcessDotEnv = () =>
     {
         const obj = process.env || {};
+        
+        // we need to remove useless values from obj
+        const uselessValue = "[object Object]";
+        Object.keys(obj).forEach(t =>
+        {
+            if (obj[t] === uselessValue)
+                delete obj[t];
+        });
         console.log("parseProcessDotEnv", JSON.stringify(obj));
         return obj;
     };
