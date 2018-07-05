@@ -35,7 +35,7 @@ else
                 version: parsed.getValue("version")
             };
         }
-
+        console.log("parsePackageDotJson", JSON.stringify(obj));
         return obj;
     };
     
@@ -49,7 +49,7 @@ else
         const json: string = fs.readFileSync(configDotJsonPath, "utf8");
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
             obj = JSON.parse(json.toString());
-        
+        console.log("parseConfigDotJson", JSON.stringify(obj));
         return obj;
     };
     
@@ -91,13 +91,15 @@ else
                 obj[key] = value;
             }
         });
-
+        console.log("parseDotEnv", JSON.stringify(obj));
         return obj;
     };
     
     const parseProcessDotEnv = () =>
     {
-        return process.env || {};
+        const obj = process.env || {};
+        console.log("parseProcessDotEnv", JSON.stringify(obj));
+        return obj;
     };
     
     const parseCommandLineArgs = () =>
@@ -146,7 +148,7 @@ else
             const strVal = value;
             obj[key] = strVal;
         }
-        
+        console.log("parseCommandLineArgs", JSON.stringify(obj));
         return obj;
     };
     
