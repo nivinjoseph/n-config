@@ -26,7 +26,6 @@ else {
                 version: parsed.getValue("version")
             };
         }
-        // console.log("parsePackageDotJson", JSON.stringify(obj));
         return obj;
     };
     const parseConfigDotJson = () => {
@@ -37,14 +36,8 @@ else {
         const json = fs.readFileSync(configDotJsonPath, "utf8");
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
             obj = JSON.parse(json.toString());
-        // console.log("parseConfigDotJson", JSON.stringify(obj));
         return obj;
     };
-    /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
-    * Parses a string or buffer into an object
-    * @param {(string|Buffer)} src - source to be parsed
-    * @returns {Object} keys and values from src
-    */
     const parseDotEnv = () => {
         const dotEnvPath = path.resolve(process.cwd(), ".env");
         const obj = {};
@@ -52,35 +45,27 @@ else {
             return obj;
         const src = fs.readFileSync(dotEnvPath, "utf8");
         src.toString().split("\n").forEach((line) => {
-            // matching "KEY' and 'VAL' in 'KEY=VAL'
             const keyValueArr = line.match(/^\s*([\w\.\-]+)\s*=\s*(.*)?\s*$/);
-            // matched?
             if (keyValueArr != null) {
                 const key = keyValueArr[1];
-                // default undefined or missing values to empty string
                 let value = keyValueArr[2] || "";
-                // expand newlines in quoted values
                 const len = value ? value.length : 0;
-                if (len > 0 && value.charAt(0) === '"' && value.charAt(len - 1) === '"') {
+                if (len > 0 && value.charAt(0) === `"` && value.charAt(len - 1) === `"`) {
                     value = value.replace(/\\n/gm, "\n");
                 }
-                // remove any surrounding quotes and extra spaces
                 value = value.replace(/(^['"]|['"]$)/g, "").trim();
                 obj[key] = value;
             }
         });
-        // console.log("parseDotEnv", JSON.stringify(obj));
         return obj;
     };
     const parseProcessDotEnv = () => {
         const obj = process.env || {};
-        // we need to remove useless values from obj
         const uselessValue = "[object Object]";
         Object.keys(obj).forEach(t => {
             if (obj[t] === uselessValue)
                 delete obj[t];
         });
-        // console.log("parseProcessDotEnv", JSON.stringify(obj));
         return obj;
     };
     const parseCommandLineArgs = () => {
@@ -115,7 +100,6 @@ else {
             const strVal = value;
             obj[key] = strVal;
         }
-        // console.log("parseCommandLineArgs", JSON.stringify(obj));
         return obj;
     };
     config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
