@@ -13,9 +13,10 @@ else
 {    
     let fs: any;
     let path: any;
-    
+    /* tslint:disable */
     eval(`fs = require("fs");`);
     eval(`path = require("path");`);
+    /* tslint:enable */
     
     
     const parsePackageDotJson = () =>
@@ -80,7 +81,7 @@ else
 
                 // expand newlines in quoted values
                 const len = value ? value.length : 0;
-                if (len > 0 && value.charAt(0) === '"' && value.charAt(len - 1) === '"')
+                if (len > 0 && value.charAt(0) === `"` && value.charAt(len - 1) === `"`)
                 {
                     value = value.replace(/\\n/gm, "\n");
                 }
