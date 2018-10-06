@@ -105,7 +105,6 @@ else {
     config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
 }
 class ConfigurationManager {
-    static get configObject() { return Object.assign({}, config); }
     constructor() { }
     static getConfig(key) {
         n_defensive_1.given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
