@@ -169,9 +169,6 @@ else
 
 export abstract class ConfigurationManager
 {
-    public static get configObject(): object { return Object.assign({}, config); }
-    
-    
     private constructor() { }
     
     
