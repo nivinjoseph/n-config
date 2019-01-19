@@ -1,13 +1,13 @@
 import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
-import { Buffer } from "buffer";
 
 
 let config: { [index: string]: any } = {};
 
 if (typeof window !== "undefined" && typeof document !== "undefined")
 {
-    config = Object.assign(config, JSON.parse(Buffer.from((<any>window).config, "hex").toString("utf8")));
+    if ((<any>window).config != null && typeof((<any>window).config) === "string")
+        config = Object.assign(config, JSON.parse((<string>(<any>window).config).hexDecode()));
 }    
 else
 {    

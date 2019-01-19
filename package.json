@@ -30,16 +30,16 @@
         "url": "https://github.com/nivinjoseph/n-config/issues"
     },
     "homepage": "https://github.com/nivinjoseph/n-config#readme",
-    "devDependencies": {},
-    "dependencies": {
-        "@nivinjoseph/n-defensive": "^1.0.19",
-        "@nivinjoseph/n-ext": "^1.0.28",
+    "devDependencies": {
         "@types/mocha": "^5.2.5",
         "@types/node": "^8.9.5",
-        "buffer": "^5.2.1",
         "mocha": "^5.2.0",
         "ts-node": "^7.0.1",
         "tslint": "^5.11.0",
         "typescript": "^3.1.1"
+    },
+    "dependencies": {
+        "@nivinjoseph/n-defensive": "^1.0.21",
+        "@nivinjoseph/n-ext": "^1.1.2"
     }
 }
