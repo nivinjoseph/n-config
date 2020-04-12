@@ -1,11 +1,16 @@
 import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
 
+declare const CONFIG: any;
 
 let config: { [index: string]: any } = {};
 
 if (typeof window !== "undefined" && typeof document !== "undefined")
 {
+    const conf = CONFIG;
+    if (conf && typeof (conf) === "object")
+        config = Object.assign(config, conf);
+    
     if ((<any>window).config != null && typeof((<any>window).config) === "string")
         config = Object.assign(config, JSON.parse((<string>(<any>window).config).hexDecode()));
 }    
