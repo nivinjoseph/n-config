@@ -4,7 +4,7 @@ require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 let config = {};
 if (typeof window !== "undefined" && typeof document !== "undefined") {
-    const conf = CONFIG;
+    const conf = APP_CONFIG;
     if (conf && typeof (conf) === "object")
         config = Object.assign(config, conf);
     if (window.config != null && typeof (window.config) === "string")
