@@ -23,7 +23,7 @@ else {
         const json = fs.readFileSync(packageDotJsonPath, "utf8");
         if (json != null && !json.toString().isEmptyOrWhiteSpace()) {
             const parsed = JSON.parse(json.toString());
-            obj.appInfo = {
+            obj.package = {
                 name: parsed.getValue("name"),
                 description: parsed.getValue("description"),
                 version: parsed.getValue("version")
