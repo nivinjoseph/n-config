@@ -93,9 +93,9 @@ else {
                 continue;
             }
             try {
-                const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
-                if (!Number.isNaN(numVal)) {
-                    obj[key] = numVal;
+                const parsed = +value;
+                if (!isNaN(parsed) && isFinite(parsed)) {
+                    obj[key] = parsed;
                     continue;
                 }
             }
