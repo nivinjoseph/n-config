@@ -149,10 +149,17 @@ else
 
             try 
             {
-                const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
-                if (!Number.isNaN(numVal))
+                // const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
+                // if (!Number.isNaN(numVal))
+                // {
+                //     obj[key] = numVal;
+                //     continue;
+                // }
+                
+                const parsed = +value;
+                if (!isNaN(parsed) && isFinite(parsed))
                 {
-                    obj[key] = numVal;
+                    obj[key] = parsed;
                     continue;
                 }
             }
