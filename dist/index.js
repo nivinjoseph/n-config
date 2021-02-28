@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigurationManager = void 0;
 require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 let config = {};
@@ -105,7 +106,10 @@ else {
         }
         return obj;
     };
-    config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv(), parseCommandLineArgs());
+    const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv());
+    const clArgs = parseCommandLineArgs();
+    Object.entries(clArgs).forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
+    config = mergedConfig;
 }
 class ConfigurationManager {
     constructor() { }
