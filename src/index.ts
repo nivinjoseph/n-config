@@ -174,8 +174,13 @@ else
     };
     
     
-    config = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(),
-        parseProcessDotEnv(), parseCommandLineArgs());
+    const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(),
+        parseProcessDotEnv()) as Object;
+    
+    const clArgs = parseCommandLineArgs();
+    Object.entries(clArgs).forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
+    
+    config = mergedConfig;
 }
 
 
