@@ -106,9 +106,12 @@ else {
         }
         return obj;
     };
-    const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson(), parseDotEnv(), parseProcessDotEnv());
-    const clArgs = parseCommandLineArgs();
-    Object.entries(clArgs).forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
+    const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson());
+    [
+        ...Object.entries(parseDotEnv()),
+        ...Object.entries(parseProcessDotEnv()),
+        ...Object.entries(parseCommandLineArgs())
+    ].forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
     config = mergedConfig;
 }
 class ConfigurationManager {
