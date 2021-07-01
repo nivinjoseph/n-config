@@ -1,9 +1,82 @@
 import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
 
+
 declare const APP_CONFIG: any;
 
 let config: { [index: string]: any } = {};
+
+const parseProcessDotEnv = () =>
+{
+    const obj = process.env || {};
+
+    // we need to remove useless values from obj
+    const uselessValue = "[object Object]";
+    Object.keys(obj).forEach(t =>
+    {
+        if (obj[t] === uselessValue)
+            delete obj[t];
+    });
+    // console.log("parseProcessDotEnv", JSON.stringify(obj));
+    return obj;
+};
+
+const parseCommandLineArgs = () =>
+{
+    const obj: any = {};
+    const args = process.argv;
+    if (args.length <= 2)
+        return obj;
+
+    for (let i = 2; i < args.length; i++)
+    {
+        const arg = args[i].trim();
+
+        if (!arg.contains("="))
+            continue;
+
+        const parts = arg.split("=");
+        if (parts.length !== 2)
+            continue;
+
+        const key = parts[0].trim();
+        const value = parts[1].trim();
+
+        if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
+            continue;
+
+        const boolVal = value.toLowerCase();
+        if (boolVal === "true" || boolVal === "false")
+        {
+            obj[key] = boolVal === "true";
+            continue;
+        }
+
+        try 
+        {
+            // const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
+            // if (!Number.isNaN(numVal))
+            // {
+            //     obj[key] = numVal;
+            //     continue;
+            // }
+
+            const parsed = +value;
+            if (!isNaN(parsed) && isFinite(parsed))
+            {
+                obj[key] = parsed;
+                continue;
+            }
+        }
+        catch (error)
+        { }
+
+        const strVal = value;
+        obj[key] = strVal;
+    }
+    // console.log("parseCommandLineArgs", JSON.stringify(obj));
+    return obj;
+};
 
 if (typeof window !== "undefined" && typeof document !== "undefined")
 {
@@ -101,79 +174,6 @@ else
         return obj;
     };
     
-    const parseProcessDotEnv = () =>
-    {
-        const obj = process.env || {};
-        
-        // we need to remove useless values from obj
-        const uselessValue = "[object Object]";
-        Object.keys(obj).forEach(t =>
-        {
-            if (obj[t] === uselessValue)
-                delete obj[t];
-        });
-        // console.log("parseProcessDotEnv", JSON.stringify(obj));
-        return obj;
-    };
-    
-    const parseCommandLineArgs = () =>
-    {
-        const obj: any = {};
-        const args = process.argv;
-        if (args.length <= 2)
-            return obj;    
-        
-        for (let i = 2; i < args.length; i++)
-        {
-            const arg = args[i].trim();
-
-            if (!arg.contains("="))
-                continue;
-
-            const parts = arg.split("=");
-            if (parts.length !== 2)
-                continue;
-
-            const key = parts[0].trim();
-            const value = parts[1].trim();
-
-            if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
-                continue;
-
-            const boolVal = value.toLowerCase();
-            if (boolVal === "true" || boolVal === "false")
-            {
-                obj[key] = boolVal === "true";
-                continue;
-            }
-
-            try 
-            {
-                // const numVal = value.contains(".") ? Number.parseFloat(value) : Number.parseInt(value);
-                // if (!Number.isNaN(numVal))
-                // {
-                //     obj[key] = numVal;
-                //     continue;
-                // }
-                
-                const parsed = +value;
-                if (!isNaN(parsed) && isFinite(parsed))
-                {
-                    obj[key] = parsed;
-                    continue;
-                }
-            }
-            catch (error)
-            { }
-
-            const strVal = value;
-            obj[key] = strVal;
-        }
-        // console.log("parseCommandLineArgs", JSON.stringify(obj));
-        return obj;
-    };
-    
-    
     const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson()) as Object;
     
     [
@@ -191,10 +191,29 @@ export abstract class ConfigurationManager
     private constructor() { }
     
     
+    public static async initializeProviders(providers: ReadonlyArray<ConfigurationProvider>): Promise<void>
+    {
+        given(providers, "providers").ensureHasValue().ensureIsArray().ensure(t => t.isNotEmpty);
+        
+        const providedConfig = (await Promise.all(providers.map(t => t.provide())))
+            .reduce((acc, t) => Object.assign(acc, t), {});
+        
+        [
+            ...Object.entries(providedConfig),
+            ...Object.entries(parseProcessDotEnv()),
+            ...Object.entries(parseCommandLineArgs())
+        ].forEach((entry) => config.setValue(entry[0], entry[1]));
+    }
+    
     public static getConfig<T>(key: string): T
     {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         
         return config.getValue(key);
     }
+}
+
+export interface ConfigurationProvider
+{
+    provide(): Promise<Object>;
 }
