@@ -40,7 +40,7 @@
         "typescript-tslint-plugin": "^1.0.1"
     },
     "dependencies": {
-        "@nivinjoseph/n-defensive": "^1.0.35",
-        "@nivinjoseph/n-ext": "^1.1.24"
+        "@nivinjoseph/n-defensive": "^1.0.37",
+        "@nivinjoseph/n-ext": "^1.1.34"
     }
 }
