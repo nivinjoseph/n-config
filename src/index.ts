@@ -4,10 +4,11 @@ import { given } from "@nivinjoseph/n-defensive";
 
 declare const APP_CONFIG: any;
 
-let config: { [index: string]: any } = {};
+let config: Object = {};
 
-const parseProcessDotEnv = () =>
+const parseProcessDotEnv = (): object =>
 {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const obj = process.env || {};
 
     // we need to remove useless values from obj
@@ -21,9 +22,9 @@ const parseProcessDotEnv = () =>
     return obj;
 };
 
-const parseCommandLineArgs = () =>
+const parseCommandLineArgs = (): object =>
 {
-    const obj: any = {};
+    const obj: Record<string, any> = {};
     const args = process.argv;
     if (args.length <= 2)
         return obj;
@@ -69,7 +70,9 @@ const parseCommandLineArgs = () =>
             }
         }
         catch (error)
-        { }
+        {
+            // suppress parse error?
+         }
 
         const strVal = value;
         obj[key] = strVal;
@@ -81,33 +84,39 @@ const parseCommandLineArgs = () =>
 if (typeof window !== "undefined" && typeof document !== "undefined")
 {
     const conf = APP_CONFIG;
-    if (conf && typeof (conf) === "object")
+    if (conf && typeof conf === "object")
         config = Object.assign(config, conf);
     
-    if ((<any>window).config != null && typeof((<any>window).config) === "string")
+    if ((<any>window).config != null && typeof (<any>window).config === "string")
         config = Object.assign(config, JSON.parse((<string>(<any>window).config).hexDecode()));
 }    
 else
 {    
     let fs: any;
     let path: any;
-    /* tslint:disable */
+    
+    // eslint-disable-next-line no-eval
     eval(`fs = require("fs");`);
+    // eslint-disable-next-line no-eval
     eval(`path = require("path");`);
-    /* tslint:enable */
     
     
-    const parsePackageDotJson = () =>
+    
+    const parsePackageDotJson = (): object =>
     {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const packageDotJsonPath = path.resolve(process.cwd(), "package.json");
-        const obj: any = {};
+        const obj: Record<string, any> = {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(packageDotJsonPath))
             return obj;
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json: string = fs.readFileSync(packageDotJsonPath, "utf8");
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
         {
-            const parsed = JSON.parse(json.toString());
+            const parsed = JSON.parse(json.toString()) as Object;
             obj.package = {
                 name: parsed.getValue("name"),
                 description: parsed.getValue("description"),
@@ -118,14 +127,18 @@ else
         return obj;
     };
     
-    const parseConfigDotJson = () =>
+    const parseConfigDotJson = (): object =>
     {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const configDotJsonPath = path.resolve(process.cwd(), "config.json");
-        let obj: any = {};
+        let obj: Record<string, any> = {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(configDotJsonPath))
             return obj;    
         
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json: string = fs.readFileSync(configDotJsonPath, "utf8");
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
             obj = JSON.parse(json.toString());
         // console.log("parseConfigDotJson", JSON.stringify(obj));
@@ -137,17 +150,21 @@ else
     * @param {(string|Buffer)} src - source to be parsed
     * @returns {Object} keys and values from src
     */
-    const parseDotEnv = () =>
+    const parseDotEnv = (): object =>
     {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const dotEnvPath: string = path.resolve(process.cwd(), ".env");
-        const obj: any = {};
+        const obj: Record<string, any> = {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(dotEnvPath))
             return obj;
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const src: string = fs.readFileSync(dotEnvPath, "utf8");
         src.toString().split("\n").forEach((line) =>
         {
             // matching "KEY' and 'VAL' in 'KEY=VAL'
+            // eslint-disable-next-line no-useless-escape
             const keyValueArr = line.match(/^\s*([\w\.\-]+)\s*=\s*(.*)?\s*$/);
             // matched?
             if (keyValueArr != null)
@@ -159,7 +176,7 @@ else
 
                 // expand newlines in quoted values
                 const len = value ? value.length : 0;
-                if (len > 0 && value.charAt(0) === `"` && value.charAt(len - 1) === `"`)
+                if (len > 0 && value.startsWith(`"`) && value.charAt(len - 1) === `"`)
                 {
                     value = value.replace(/\\n/gm, "\n");
                 }
@@ -209,7 +226,7 @@ export abstract class ConfigurationManager
     {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         
-        return config.getValue(key);
+        return config.getValue(key) as T;
     }
 }
 
