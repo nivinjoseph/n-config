@@ -170,7 +170,36 @@ class ConfigurationManager {
     }
     static getConfig(key) {
         (0, n_defensive_1.given)(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
-        return config.getValue(key);
+        key = key.trim();
+        if (key === "*") {
+            return JSON.parse(JSON.stringify(config));
+        }
+        else if (key.startsWith("*") && key.endsWith("*")) {
+            key = key.substring(1, key.length - 1);
+            return Object.entries(config).reduce((acc, entry) => {
+                if (entry[0].contains(key))
+                    acc[entry[0]] = entry[1];
+                return acc;
+            }, {});
+        }
+        else if (key.startsWith("*")) {
+            key = key.substring(1);
+            return Object.entries(config).reduce((acc, entry) => {
+                if (entry[0].endsWith(key))
+                    acc[entry[0]] = entry[1];
+                return acc;
+            }, {});
+        }
+        else if (key.endsWith("*")) {
+            key = key.substring(0, key.length - 1);
+            return Object.entries(config).reduce((acc, entry) => {
+                if (entry[0].startsWith(key))
+                    acc[entry[0]] = entry[1];
+                return acc;
+            }, {});
+        }
+        else
+            return config.getValue(key);
     }
 }
 exports.ConfigurationManager = ConfigurationManager;
