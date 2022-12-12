@@ -225,8 +225,47 @@ export abstract class ConfigurationManager
     public static getConfig<T>(key: string): T
     {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
+        key = key.trim();
         
-        return config.getValue(key) as T;
+        if (key === "*")
+        {
+            return JSON.parse(JSON.stringify(config)) as T;
+        }
+        else if (key.startsWith("*") && key.endsWith("*"))
+        {
+            key = key.substring(1, key.length - 1);
+            return Object.entries(config).reduce<Record<string, unknown>>((acc, entry) =>
+            {
+                if (entry[0].contains(key))
+                    acc[entry[0]] = entry[1];
+                
+                return acc;
+            }, {}) as T;
+        }
+        else if (key.startsWith("*"))
+        {
+            key = key.substring(1);
+            return Object.entries(config).reduce<Record<string, unknown>>((acc, entry) =>
+            {
+                if (entry[0].endsWith(key))
+                    acc[entry[0]] = entry[1];
+
+                return acc;
+            }, {}) as T;
+        }
+        else if (key.endsWith("*"))
+        {
+            key = key.substring(0, key.length - 1);
+            return Object.entries(config).reduce<Record<string, unknown>>((acc, entry) =>
+            {
+                if (entry[0].startsWith(key))
+                    acc[entry[0]] = entry[1];
+
+                return acc;
+            }, {}) as T;
+        }
+        else
+            return config.getValue(key) as T;
     }
 }
 
