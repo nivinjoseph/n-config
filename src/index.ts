@@ -1,5 +1,6 @@
 import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
+import { ApplicationException } from "@nivinjoseph/n-exception";
 
 
 declare const APP_CONFIG: any;
@@ -266,6 +267,16 @@ export abstract class ConfigurationManager
         }
         else
             return config.getValue(key) as T;
+    }
+    
+    public static requireConfig<T>(key: string): T
+    {
+        const value = ConfigurationManager.getConfig(key);
+        
+        if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
+            throw new ApplicationException(`Required config '${key}' not found`);
+        
+        return value as T;
     }
 }
 
