@@ -4,6 +4,7 @@ exports.ConfigurationManager = void 0;
 const tslib_1 = require("tslib");
 require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
+const n_exception_1 = require("@nivinjoseph/n-exception");
 let config = {};
 const parseProcessDotEnv = () => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -200,6 +201,12 @@ class ConfigurationManager {
         }
         else
             return config.getValue(key);
+    }
+    static requireConfig(key) {
+        const value = ConfigurationManager.getConfig(key);
+        if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
+            throw new n_exception_1.ApplicationException(`Required config '${key}' not found`);
+        return value;
     }
 }
 exports.ConfigurationManager = ConfigurationManager;
