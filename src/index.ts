@@ -1,6 +1,7 @@
 import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
 import { ApplicationException } from "@nivinjoseph/n-exception";
+import { TypeHelper } from "@nivinjoseph/n-util";
 
 
 declare const APP_CONFIG: any;
@@ -269,14 +270,38 @@ export abstract class ConfigurationManager
             return config.getValue(key) as T;
     }
     
-    public static requireConfig<T>(key: string): T
+    public static requireConfig(key: string): unknown
     {
         const value = ConfigurationManager.getConfig(key);
         
         if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
             throw new ApplicationException(`Required config '${key}' not found`);
         
-        return value as T;
+        return value;
+    }
+    
+    public static requireStringConfig(key: string): string
+    {
+        const value = ConfigurationManager.requireConfig(key) as string;
+        return value.toString();
+    }
+    
+    public static requireNumberConfig(key: string): number
+    {
+        const value = TypeHelper.parseNumber(ConfigurationManager.requireConfig(key));
+        if (value == null)
+            throw new ApplicationException(`Required number config '${key}' not found`);
+        
+        return value;
+    }
+    
+    public static requireBooleanConfig(key: string): boolean
+    {
+        const value = TypeHelper.parseBoolean(ConfigurationManager.requireConfig(key));
+        if (value == null)
+            throw new ApplicationException(`Required boolean config '${key}' not found`);
+
+        return value;
     }
 }
 
