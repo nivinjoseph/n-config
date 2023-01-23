@@ -5,6 +5,7 @@ const tslib_1 = require("tslib");
 require("@nivinjoseph/n-ext");
 const n_defensive_1 = require("@nivinjoseph/n-defensive");
 const n_exception_1 = require("@nivinjoseph/n-exception");
+const n_util_1 = require("@nivinjoseph/n-util");
 let config = {};
 const parseProcessDotEnv = () => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -206,6 +207,22 @@ class ConfigurationManager {
         const value = ConfigurationManager.getConfig(key);
         if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
             throw new n_exception_1.ApplicationException(`Required config '${key}' not found`);
+        return value;
+    }
+    static requireStringConfig(key) {
+        const value = ConfigurationManager.requireConfig(key);
+        return value.toString();
+    }
+    static requireNumberConfig(key) {
+        const value = n_util_1.TypeHelper.parseNumber(ConfigurationManager.requireConfig(key));
+        if (value == null)
+            throw new n_exception_1.ApplicationException(`Required number config '${key}' not found`);
+        return value;
+    }
+    static requireBooleanConfig(key) {
+        const value = n_util_1.TypeHelper.parseBoolean(ConfigurationManager.requireConfig(key));
+        if (value == null)
+            throw new n_exception_1.ApplicationException(`Required boolean config '${key}' not found`);
         return value;
     }
 }
