@@ -1,6 +1,6 @@
-import "@nivinjoseph/n-ext";
 import { given } from "@nivinjoseph/n-defensive";
 import { ApplicationException } from "@nivinjoseph/n-exception";
+import "@nivinjoseph/n-ext";
 import { TypeHelper } from "@nivinjoseph/n-util";
 
 
@@ -74,7 +74,7 @@ const parseCommandLineArgs = (): object =>
         catch (error)
         {
             // suppress parse error?
-         }
+        }
 
         const strVal = value;
         obj[key] = strVal;
@@ -88,22 +88,18 @@ if (typeof window !== "undefined" && typeof document !== "undefined")
     const conf = APP_CONFIG;
     if (conf && typeof conf === "object")
         config = Object.assign(config, conf);
-    
+
     if ((<any>window).config != null && typeof (<any>window).config === "string")
         config = Object.assign(config, JSON.parse((<string>(<any>window).config).hexDecode()));
-}    
+}
 else
-{    
-    let fs: any;
-    let path: any;
-    
-    // eslint-disable-next-line no-eval
-    eval(`fs = require("fs");`);
-    // eslint-disable-next-line no-eval
-    eval(`path = require("path");`);
-    
-    
-    
+{
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+
+
+
+
     const parsePackageDotJson = (): object =>
     {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -128,7 +124,7 @@ else
         // console.log("parsePackageDotJson", JSON.stringify(obj));
         return obj;
     };
-    
+
     const parseConfigDotJson = (): object =>
     {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -136,8 +132,8 @@ else
         let obj: Record<string, any> = {};
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(configDotJsonPath))
-            return obj;    
-        
+            return obj;
+
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json: string = fs.readFileSync(configDotJsonPath, "utf8");
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -146,7 +142,7 @@ else
         // console.log("parseConfigDotJson", JSON.stringify(obj));
         return obj;
     };
-    
+
     /* BORROWED FROM https://github.com/motdotla/dotenv/blob/master/lib/main.js
     * Parses a string or buffer into an object
     * @param {(string|Buffer)} src - source to be parsed
@@ -192,15 +188,15 @@ else
         // console.log("parseDotEnv", JSON.stringify(obj));
         return obj;
     };
-    
+
     const mergedConfig = Object.assign(config, parsePackageDotJson(), parseConfigDotJson()) as Object;
-    
+
     [
         ...Object.entries(parseDotEnv()),
         ...Object.entries(parseProcessDotEnv()),
         ...Object.entries(parseCommandLineArgs())
     ].forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
-    
+
     config = mergedConfig;
 }
 
@@ -208,27 +204,27 @@ else
 export abstract class ConfigurationManager
 {
     private constructor() { }
-    
-    
+
+
     public static async initializeProviders(providers: ReadonlyArray<ConfigurationProvider>): Promise<void>
     {
         given(providers, "providers").ensureHasValue().ensureIsArray().ensure(t => t.isNotEmpty);
-        
+
         const providedConfig = (await Promise.all(providers.map(t => t.provide())))
             .reduce((acc, t) => Object.assign(acc, t), {});
-        
+
         [
             ...Object.entries(providedConfig),
             ...Object.entries(parseProcessDotEnv()),
             ...Object.entries(parseCommandLineArgs())
         ].forEach((entry) => config.setValue(entry[0], entry[1]));
     }
-    
+
     public static getConfig<T>(key: string): T
     {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         key = key.trim();
-        
+
         if (key === "*")
         {
             return JSON.parse(JSON.stringify(config)) as T;
@@ -240,7 +236,7 @@ export abstract class ConfigurationManager
             {
                 if (entry[0].contains(key))
                     acc[entry[0]] = entry[1];
-                
+
                 return acc;
             }, {}) as T;
         }
@@ -269,32 +265,32 @@ export abstract class ConfigurationManager
         else
             return config.getValue(key) as T;
     }
-    
+
     public static requireConfig(key: string): unknown
     {
         const value = ConfigurationManager.getConfig(key);
-        
+
         if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
             throw new ApplicationException(`Required config '${key}' not found`);
-        
+
         return value;
     }
-    
+
     public static requireStringConfig(key: string): string
     {
         const value = ConfigurationManager.requireConfig(key) as string;
         return value.toString();
     }
-    
+
     public static requireNumberConfig(key: string): number
     {
         const value = TypeHelper.parseNumber(ConfigurationManager.requireConfig(key));
         if (value == null)
             throw new ApplicationException(`Required number config '${key}' not found`);
-        
+
         return value;
     }
-    
+
     public static requireBooleanConfig(key: string): boolean
     {
         const value = TypeHelper.parseBoolean(ConfigurationManager.requireConfig(key));
