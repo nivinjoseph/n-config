@@ -41,6 +41,7 @@
         "@nivinjoseph/n-ext": "^1.0.1",
         "@nivinjoseph/n-util": "^1.1.1"
     },
+    "engineStrict": true,
     "engines": {
         "node": ">=20.10"
     }
