@@ -1,11 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigurationManager = void 0;
-const tslib_1 = require("tslib");
-require("@nivinjoseph/n-ext");
-const n_defensive_1 = require("@nivinjoseph/n-defensive");
-const n_exception_1 = require("@nivinjoseph/n-exception");
-const n_util_1 = require("@nivinjoseph/n-util");
+import { given } from "@nivinjoseph/n-defensive";
+import { ApplicationException } from "@nivinjoseph/n-exception";
+import "@nivinjoseph/n-ext";
+import { TypeHelper } from "@nivinjoseph/n-util";
 let config = {};
 const parseProcessDotEnv = () => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -70,12 +66,8 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
         config = Object.assign(config, JSON.parse(window.config.hexDecode()));
 }
 else {
-    let fs;
-    let path;
-    // eslint-disable-next-line no-eval
-    eval(`fs = require("fs");`);
-    // eslint-disable-next-line no-eval
-    eval(`path = require("path");`);
+    const fs = await import("node:fs");
+    const path = await import("node:path");
     const parsePackageDotJson = () => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const packageDotJsonPath = path.resolve(process.cwd(), "package.json");
@@ -156,22 +148,20 @@ else {
     ].forEach((entry) => mergedConfig.setValue(entry[0], entry[1]));
     config = mergedConfig;
 }
-class ConfigurationManager {
+export class ConfigurationManager {
     constructor() { }
-    static initializeProviders(providers) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            (0, n_defensive_1.given)(providers, "providers").ensureHasValue().ensureIsArray().ensure(t => t.isNotEmpty);
-            const providedConfig = (yield Promise.all(providers.map(t => t.provide())))
-                .reduce((acc, t) => Object.assign(acc, t), {});
-            [
-                ...Object.entries(providedConfig),
-                ...Object.entries(parseProcessDotEnv()),
-                ...Object.entries(parseCommandLineArgs())
-            ].forEach((entry) => config.setValue(entry[0], entry[1]));
-        });
+    static async initializeProviders(providers) {
+        given(providers, "providers").ensureHasValue().ensureIsArray().ensure(t => t.isNotEmpty);
+        const providedConfig = (await Promise.all(providers.map(t => t.provide())))
+            .reduce((acc, t) => Object.assign(acc, t), {});
+        [
+            ...Object.entries(providedConfig),
+            ...Object.entries(parseProcessDotEnv()),
+            ...Object.entries(parseCommandLineArgs())
+        ].forEach((entry) => config.setValue(entry[0], entry[1]));
     }
     static getConfig(key) {
-        (0, n_defensive_1.given)(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
+        given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         key = key.trim();
         if (key === "*") {
             return JSON.parse(JSON.stringify(config));
@@ -206,7 +196,7 @@ class ConfigurationManager {
     static requireConfig(key) {
         const value = ConfigurationManager.getConfig(key);
         if (value == null || (typeof value === "string" && value.isEmptyOrWhiteSpace()))
-            throw new n_exception_1.ApplicationException(`Required config '${key}' not found`);
+            throw new ApplicationException(`Required config '${key}' not found`);
         return value;
     }
     static requireStringConfig(key) {
@@ -214,17 +204,16 @@ class ConfigurationManager {
         return value.toString();
     }
     static requireNumberConfig(key) {
-        const value = n_util_1.TypeHelper.parseNumber(ConfigurationManager.requireConfig(key));
+        const value = TypeHelper.parseNumber(ConfigurationManager.requireConfig(key));
         if (value == null)
-            throw new n_exception_1.ApplicationException(`Required number config '${key}' not found`);
+            throw new ApplicationException(`Required number config '${key}' not found`);
         return value;
     }
     static requireBooleanConfig(key) {
-        const value = n_util_1.TypeHelper.parseBoolean(ConfigurationManager.requireConfig(key));
+        const value = TypeHelper.parseBoolean(ConfigurationManager.requireConfig(key));
         if (value == null)
-            throw new n_exception_1.ApplicationException(`Required boolean config '${key}' not found`);
+            throw new ApplicationException(`Required boolean config '${key}' not found`);
         return value;
     }
 }
-exports.ConfigurationManager = ConfigurationManager;
 //# sourceMappingURL=index.js.map

@@ -11,3 +11,4 @@ export declare abstract class ConfigurationManager {
 export interface ConfigurationProvider {
     provide(): Promise<Object>;
 }
+//# sourceMappingURL=index.d.ts.map

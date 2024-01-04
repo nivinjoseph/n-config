@@ -1,6 +1,6 @@
 {
     "name": "@nivinjoseph/n-config",
-    "version": "1.0.38",
+    "version": "2.0.0",
     "description": "Configuration management library",
     "packageManager": "yarn@4.0.2",
     "type": "module",
@@ -37,9 +37,9 @@
     },
     "dependencies": {
         "@nivinjoseph/n-defensive": "^2.0.1",
-        "@nivinjoseph/n-exception": "^1.0.1",
-        "@nivinjoseph/n-ext": "^1.0.1",
-        "@nivinjoseph/n-util": "^1.1.1"
+        "@nivinjoseph/n-exception": "^2.0.1",
+        "@nivinjoseph/n-ext": "^2.0.1",
+        "@nivinjoseph/n-util": "^2.0.1"
     },
     "engineStrict": true,
     "engines": {

@@ -84,9 +84,9 @@ __metadata:
   resolution: "@nivinjoseph/n-config@workspace:."
   dependencies:
     "@nivinjoseph/n-defensive": "npm:^2.0.1"
-    "@nivinjoseph/n-exception": "npm:^1.0.1"
-    "@nivinjoseph/n-ext": "npm:^1.0.1"
-    "@nivinjoseph/n-util": "npm:^1.1.1"
+    "@nivinjoseph/n-exception": "npm:^2.0.1"
+    "@nivinjoseph/n-ext": "npm:^2.0.1"
+    "@nivinjoseph/n-util": "npm:^2.0.1"
     "@types/node": "npm:^20.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.15.0"
     "@typescript-eslint/parser": "npm:^6.15.0"
@@ -96,17 +96,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@nivinjoseph/n-defensive@npm:^1.0.44":
-  version: 1.0.44
-  resolution: "@nivinjoseph/n-defensive@npm:1.0.44"
-  dependencies:
-    "@nivinjoseph/n-exception": "npm:^1.0.26"
-    "@nivinjoseph/n-ext": "npm:^1.1.36"
-    tslib: "npm:^2.4.0"
-  checksum: abfe2f8705b75fe521f52687cf7a58fcaa4b05f42d87bef59144e69336ca1d6f79b7fd98e811d7e35a876a07db816760d4f9c216286a062f7f2c2e923c764d99
-  languageName: node
-  linkType: hard
-
 "@nivinjoseph/n-defensive@npm:^2.0.1":
   version: 2.0.1
   resolution: "@nivinjoseph/n-defensive@npm:2.0.1"
@@ -115,16 +104,6 @@ __metadata:
     "@nivinjoseph/n-ext": "npm:^2.0.1"
     tslib: "npm:^2.6.2"
   checksum: 8c991bdbbcc5d8c7e96055f00ffa948d4b4a2f6205087782e0ccd303f86d4c6a7629a4954e3043419abd94e0ec5fb0326c4b80b26b1f0ee3c1e55ffe50f7e28e
-  languageName: node
-  linkType: hard
-
-"@nivinjoseph/n-exception@npm:^1.0.1, @nivinjoseph/n-exception@npm:^1.0.26":
-  version: 1.0.26
-  resolution: "@nivinjoseph/n-exception@npm:1.0.26"
-  dependencies:
-    "@nivinjoseph/n-ext": "npm:^1.1.35"
-    tslib: "npm:^2.4.0"
-  checksum: 96118f6a866093add3e9754c9ee7fa9407bdd52f66e1fd8927791ae2d58b28847a9dd59a40c7653ce835586b3f836b489150c06f8465456e034a4e3a066965e6
   languageName: node
   linkType: hard
 
@@ -138,16 +117,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivinjoseph/n-ext@npm:^1.0.1, @nivinjoseph/n-ext@npm:^1.1.35, @nivinjoseph/n-ext@npm:^1.1.36":
-  version: 1.1.36
-  resolution: "@nivinjoseph/n-ext@npm:1.1.36"
-  dependencies:
-    buffer: "npm:^6.0.3"
-    tslib: "npm:^2.4.0"
-  checksum: 3b64b93eb6483c7b8c411f64408909be6c58fe96003e5a31a92b4adc6e61f674cf8053893c615756c4f82ab8f47682396ce766e1e475e6d7bc739e70346a3eed
-  languageName: node
-  linkType: hard
-
 "@nivinjoseph/n-ext@npm:^2.0.1":
   version: 2.0.1
   resolution: "@nivinjoseph/n-ext@npm:2.0.1"
@@ -158,19 +127,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nivinjoseph/n-util@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@nivinjoseph/n-util@npm:1.1.1"
+"@nivinjoseph/n-util@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@nivinjoseph/n-util@npm:2.0.1"
   dependencies:
-    "@nivinjoseph/n-defensive": "npm:^1.0.44"
-    "@nivinjoseph/n-exception": "npm:^1.0.26"
-    "@nivinjoseph/n-ext": "npm:^1.1.36"
+    "@nivinjoseph/n-defensive": "npm:^2.0.1"
+    "@nivinjoseph/n-exception": "npm:^2.0.1"
+    "@nivinjoseph/n-ext": "npm:^2.0.1"
     luxon: "npm:^3.4.4"
     mustache: "npm:^4.2.0"
     sanitize-html: "npm:^2.11.0"
-    tslib: "npm:^2.4.0"
+    tslib: "npm:^2.6.2"
     uuid: "npm:^9.0.1"
-  checksum: b32da6dd1aba07a41edb17b08b184feb9eff7eb902eee026c28077d9461d8dbe032369a99264373e89855783040a27184770e909d00b0acf06d422f4f29b53cc
+  checksum: 4215d057c7337abcde90fe9292edf3400a5d5c44c6fb44051e93f0a47edd2d78ff47b08f2bade8cd899fc645444d2e7c6065cdcb0d56d99206cf3aeaa2b323d0
   languageName: node
   linkType: hard
 
@@ -1419,7 +1388,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.4.0, tslib@npm:^2.6.2":
+"tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: e03a8a4271152c8b26604ed45535954c0a45296e32445b4b87f8a5abdb2421f40b59b4ca437c4346af0f28179780d604094eb64546bee2019d903d01c6c19bdb
