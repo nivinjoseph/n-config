@@ -69,13 +69,10 @@ else {
     const fs = await import("node:fs");
     const path = await import("node:path");
     const parsePackageDotJson = () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const packageDotJsonPath = path.resolve(process.cwd(), "package.json");
         const obj = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(packageDotJsonPath))
             return obj;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json = fs.readFileSync(packageDotJsonPath, "utf8");
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace()) {
@@ -90,13 +87,10 @@ else {
         return obj;
     };
     const parseConfigDotJson = () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const configDotJsonPath = path.resolve(process.cwd(), "config.json");
         let obj = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(configDotJsonPath))
             return obj;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json = fs.readFileSync(configDotJsonPath, "utf8");
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
@@ -110,13 +104,10 @@ else {
     * @returns {Object} keys and values from src
     */
     const parseDotEnv = () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const dotEnvPath = path.resolve(process.cwd(), ".env");
         const obj = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(dotEnvPath))
             return obj;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const src = fs.readFileSync(dotEnvPath, "utf8");
         src.toString().split("\n").forEach((line) => {
             // matching "KEY' and 'VAL' in 'KEY=VAL'
