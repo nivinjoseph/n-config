@@ -102,14 +102,11 @@ else
 
     const parsePackageDotJson = (): object =>
     {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const packageDotJsonPath = path.resolve(process.cwd(), "package.json");
         const obj: Record<string, any> = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(packageDotJsonPath))
             return obj;
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json: string = fs.readFileSync(packageDotJsonPath, "utf8");
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
@@ -127,14 +124,11 @@ else
 
     const parseConfigDotJson = (): object =>
     {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const configDotJsonPath = path.resolve(process.cwd(), "config.json");
         let obj: Record<string, any> = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(configDotJsonPath))
             return obj;
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const json: string = fs.readFileSync(configDotJsonPath, "utf8");
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (json != null && !json.toString().isEmptyOrWhiteSpace())
@@ -150,14 +144,11 @@ else
     */
     const parseDotEnv = (): object =>
     {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const dotEnvPath: string = path.resolve(process.cwd(), ".env");
         const obj: Record<string, any> = {};
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (!fs.existsSync(dotEnvPath))
             return obj;
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const src: string = fs.readFileSync(dotEnvPath, "utf8");
         src.toString().split("\n").forEach((line) =>
         {
