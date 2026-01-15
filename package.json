@@ -12,7 +12,7 @@
         "ts-build": "yarn ts-compile && npm run ts-lint",
         "ts-build-dist": "yarn ts-build && tsc -p ./dist",
         "test": "yarn ts-build && node --test --enable-source-maps ./test/**/*.test.js",
-        "publish-package": "yarn ts-build-dist && git add . && git commit -m 'preparing to publish new version' && npm version patch && git push && npm publish --access=public"
+        "publish-package": "yarn ts-build-dist && git add . && git commit -m 'preparing to publish new version' && git push && npm publish --access=public"
     },
     "repository": {
         "type": "git",
@@ -41,7 +41,7 @@
         "@nivinjoseph/n-defensive": "^2.0.2",
         "@nivinjoseph/n-exception": "^2.0.2",
         "@nivinjoseph/n-ext": "^2.0.2",
-        "@nivinjoseph/n-util": "^3.0.2"
+        "@nivinjoseph/n-util": "^3.2.0"
     },
     "engines": {
         "node": ">=24.10"
