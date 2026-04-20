@@ -2,5 +2,13 @@
     "test": 23,
     "test1": null,
     "testValue": "foo",
-    "test1Value": "bar"
+    "test1Value": "bar",
+    "requireTrue": true,
+    "requireFalse": false,
+    "requireNumericStr": "42",
+    "requireEmpty": "",
+    "requireWhitespace": "   ",
+    "requireNested": {
+        "inner": "nestedValue"
+    }
 }

@@ -35,15 +35,12 @@ const parseCommandLineArgs = (): object =>
     {
         const arg = args[i].trim();
 
-        if (!arg.contains("="))
+        const separatorIndex = arg.indexOf("=");
+        if (separatorIndex === -1)
             continue;
 
-        const parts = arg.split("=");
-        if (parts.length !== 2)
-            continue;
-
-        const key = parts[0].trim();
-        const value = parts[1].trim();
+        const key = arg.substring(0, separatorIndex).trim();
+        const value = arg.substring(separatorIndex + 1).trim();
 
         if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
             continue;
@@ -211,14 +208,14 @@ export abstract class ConfigurationManager
         ].forEach((entry) => config.setValue(entry[0], entry[1]));
     }
 
-    public static getConfig<T>(key: string): T
+    public static getConfig<T>(key: string): T | null
     {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         key = key.trim();
 
         if (key === "*")
         {
-            return JSON.parse(JSON.stringify(config)) as T;
+            return JSON.parse(JSON.stringify(config)) as T ?? null;
         }
         else if (key.startsWith("*") && key.endsWith("*"))
         {
@@ -254,7 +251,7 @@ export abstract class ConfigurationManager
             }, {}) as T;
         }
         else
-            return config.getValue(key) as T;
+            return config.getValue(key) as T ?? null;
     }
 
     public static requireConfig(key: string): unknown
