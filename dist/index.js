@@ -22,13 +22,11 @@ const parseCommandLineArgs = () => {
         return obj;
     for (let i = 2; i < args.length; i++) {
         const arg = args[i].trim();
-        if (!arg.contains("="))
+        const separatorIndex = arg.indexOf("=");
+        if (separatorIndex === -1)
             continue;
-        const parts = arg.split("=");
-        if (parts.length !== 2)
-            continue;
-        const key = parts[0].trim();
-        const value = parts[1].trim();
+        const key = arg.substring(0, separatorIndex).trim();
+        const value = arg.substring(separatorIndex + 1).trim();
         if (key.isEmptyOrWhiteSpace() || value.isEmptyOrWhiteSpace())
             continue;
         const boolVal = value.toLowerCase();
@@ -155,7 +153,7 @@ export class ConfigurationManager {
         given(key, "key").ensureHasValue().ensureIsString().ensure(t => !t.isEmptyOrWhiteSpace());
         key = key.trim();
         if (key === "*") {
-            return JSON.parse(JSON.stringify(config));
+            return JSON.parse(JSON.stringify(config)) ?? null;
         }
         else if (key.startsWith("*") && key.endsWith("*")) {
             key = key.substring(1, key.length - 1);
@@ -182,7 +180,7 @@ export class ConfigurationManager {
             }, {});
         }
         else
-            return config.getValue(key);
+            return config.getValue(key) ?? null;
     }
     static requireConfig(key) {
         const value = ConfigurationManager.getConfig(key);
