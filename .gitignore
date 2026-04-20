@@ -51,3 +51,6 @@ test/**/*.map
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# macOS Finder metadata
+**/.DS_Store
